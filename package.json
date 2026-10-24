@@ -1,0 +1,36 @@
+{
+  "name": "dsh-view-studio",
+  "version": "1.2.4",
+  "description": "视图工作室：为 DeepSeek Harness Web UI 提供壁纸与视频背景，可调模糊、亮度、饱和度、暗化、强调色和统一遮罩。",
+  "license": "MIT",
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "wallpaper",
+    "video-wallpaper",
+    "theme"
+  ],
+  "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "README.md"
+  ],
+  "dsh": {
+    "bundle": { "patch": "./cordis.patch.yml" },
+    "client": {
+      "platform": "web",
+      "immediately": true
+    }
+  }
+}
