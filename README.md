@@ -34,7 +34,21 @@ https://github.com/oi9-12/harness-view-studio
 - **本地目录**：填插件的绝对路径，例如 `D:\plugins\dsh-view-studio`
 - **tarball**：`pnpm pack` 出来的 `.tgz` 绝对路径或 https 地址
 
-装完刷新页面（`Ctrl+R`），侧边栏底部会多出一个滑块图标。
+装完后**完全退出并重新启动 DSH**（不是只刷新页面），侧边栏底部会多出一个滑块图标。
+
+> 为什么必须重启：宿主进程会缓存模块解析路径。首次安装、更换安装来源（例如从本地目录换成 git）、或升级版本后，只刷新页面可能出现「包元信息错误」或「failed to import」——重启一次即可，之后正常使用不需要再重启。
+
+### 网络受限时
+
+插件页在添加 GitHub 来源前会做一次 5 秒连通性探测。如果你的网络需要代理才能访问 GitHub：
+
+- 探测超时不影响真正的安装：点弹窗里的「**试试其他方式**」改用**本地路径 / tarball / npm**；
+- 或者给 **git** 单独配置代理（插件管理器用 git 拉取代码）：
+  ```powershell
+  git config --global http.proxy  http://127.0.0.1:10808
+  git config --global https.proxy http://127.0.0.1:10808
+  ```
+  端口按你本地代理软件的实际 HTTP 端口填。
 
 ## 使用
 
@@ -55,7 +69,7 @@ https://github.com/oi9-12/harness-view-studio
 ## 开发
 
 ```
-view-studio/
+dsh-view-studio/
 ├── package.json        # dsh.bundle.patch + dsh.client 声明
 ├── cordis.patch.yml    # 往 profile 插入一行
 ├── index.js            # Host 半侧（空实现，Loader 需要一个可解析的入口）
@@ -65,12 +79,14 @@ view-studio/
 └── icon.svg
 ```
 
-改完 `client.js` 必须 **先移除再安装**（浏览器模块按 id 缓存，直接覆盖不会生效），然后 `Ctrl+R`：
+改完 `client.js` 必须 **先移除再安装**（浏览器模块按 id 缓存，直接覆盖不会生效），再重启 DSH：
 
 ```
 plugin_manager remove_bundle  dsh-view-studio
-plugin_manager install_bundle <插件绝对路径>
+plugin_manager install_bundle <插件绝对路径或 git 地址>
 ```
+
+只刷新页面时，宿主仍可能持有旧的模块解析路径，表现是「包元信息错误」或「failed to import」；重启一次即可。
 
 ## 已知限制
 
