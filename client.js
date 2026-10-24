@@ -263,6 +263,21 @@
     blur(var(--dsh-vs-blur, 0px));
 }
 
+/* The changes / deliverables cards and the composer paint from a *static*
+   palette colour kept in component-local custom properties (--changes-fill,
+   --deliverable-fill), not from the alias layer, so token overrides cannot
+   reach them. Clear those properties on the elements that read them; each
+   block's own border stays, so the block is still visible as a block. */
+[class*="_card"],
+[class*="_header"],
+[class*="_file"],
+[class*="_output"],
+[class*="_tile"] {
+  --changes-fill: transparent !important;
+  --changes-hover: transparent !important;
+  --deliverable-fill: transparent !important;
+}
+
 /* Fallback for pages without a recognisable frame element. */
 html.dsh-vs-active body {
   background: transparent !important;
@@ -636,6 +651,21 @@ html.dsh-vs-active body::before {
         dark: 'transparent',
       };
       tokens['--dsw-specific-sidebar-fill'] = {
+        light: 'transparent',
+        dark: 'transparent',
+      };
+      // The composer card paints from the `specific` family rather than the
+      // alias layer, so it needs its own override.
+      tokens['--dsw-specific-input-major'] = {
+        light: 'transparent',
+        dark: 'transparent',
+      };
+      // Markdown code blocks paint from their own alias pair.
+      tokens['--dsw-alias-markdown-code-block'] = {
+        light: 'transparent',
+        dark: 'transparent',
+      };
+      tokens['--dsw-alias-markdown-code-block-banner'] = {
         light: 'transparent',
         dark: 'transparent',
       };
